@@ -2,10 +2,10 @@ from typing import Literal
 from .db import DATABASE_NAME
 
 
-
-SHELTER_TABLE_NAME = 'shelter'
-USER_TABLE_NAME = '"user"'
-EMPLOYEE_TABLE_NAME = 'employee'
-ABSTRACT_PET_TABLE_NAME = 'abstract_pet'
-PET_INSTANCE_TABLE_NAME = 'pet_instance'
-PET_TAKEOUT_REQUEST_TABLE_NAME = 'pet_takeout_request'
+DATABASE_SCHEMA = 'test'
+SHELTER_TABLE_NAME = f'{DATABASE_SCHEMA}.shelter'
+USER_TABLE_NAME = f'{DATABASE_SCHEMA}."user"'
+EMPLOYEE_TABLE_NAME = f'{DATABASE_SCHEMA}.employee'
+ABSTRACT_PET_TABLE_NAME = f'{DATABASE_SCHEMA}.abstract_pet'
+PET_INSTANCE_TABLE_NAME = f'{DATABASE_SCHEMA}.pet_instance'
+PET_TAKEOUT_REQUEST_TABLE_NAME = f'{DATABASE_SCHEMA}.pet_takeout_request'

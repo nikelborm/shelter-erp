@@ -1,2 +1,4 @@
 fastapi
 asyncpg
+pydantic
+pydantic[email]
