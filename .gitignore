@@ -1,0 +1,6 @@
+data
+node_modules
+.devcontainer/docker-compose.built.yaml
+detection
+__pycache__/
+frontend/public/video.mp4
