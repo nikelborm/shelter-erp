@@ -34,7 +34,8 @@ VALUES
 
 INSERT INTO "pet_takeout_request" ("adopter_user_id", "employee_user_id", "shelter_id", "pet_instance_id", "status", "created_at", "resolved_at")
 VALUES
+  (1, 1, 1, 2, 'undecided', '2023-11-23 10:00:00', NULL),
   (1, 1, 1, 1, 'approved', '2023-11-23 10:00:00', '2023-11-23 11:00:00'),
-  (2, 2, 3, 3, 'rejected', '2023-11-22 09:00:00', NULL);
+  (2, 2, 3, 3, 'rejected', '2023-11-22 09:00:00', '2023-11-23 11:00:00');
 
 COMMIT;
