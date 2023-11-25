@@ -7,11 +7,6 @@ class DatabaseTransactionManager():
   connection: Connection
   transaction: Transaction
   async def __aenter__(self) -> Connection:
-    print(DATABASE_USERNAME)
-    print(DATABASE_PASSWORD)
-    print(DATABASE_NAME)
-    print(DATABASE_HOST)
-    print(DATABASE_PORT)
     self.connection = await connect(
       user=DATABASE_USERNAME,
       password=DATABASE_PASSWORD,
