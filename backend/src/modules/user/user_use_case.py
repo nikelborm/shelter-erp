@@ -1,34 +1,28 @@
-from src.db.queries import selectAllUsers, insertUser
+from fastapi import HTTPException
+from .models import User, UserWithoutId
+from .helpers import getDBUserWithoutId, getUser
+from src.db.queries import selectAllUsers, insertUser, selectUserById
+from src.db.errors import ReturnedZeroRowsException
 from src.db.models import DBUserWithoutId
-from pydantic import BaseModel, EmailStr
-
-class UserWithoutId(BaseModel):
-  firstName: str
-  secondName: str
-  email: EmailStr
-  phone: str
-
-class User(UserWithoutId):
-  id: int
 
 async def getAllUsers():
   db_users = await selectAllUsers()
-  return [User(
-    id=user.user_id,
-    firstName=user.first_name,
-    secondName=user.second_name,
-    email=user.email,
-    phone=user.phone
-  ) for user in db_users]
+  return [getUser(db_user) for db_user in db_users]
+
+async def getOneUserById(user_id: int):
+  try:
+    db_user = await selectUserById(user_id)
+  except ReturnedZeroRowsException:
+    raise HTTPException(status_code=404, detail="User not found")
+
+  return getUser(db_user)
 
 async def createUser(user: UserWithoutId) -> User:
-  new_user_id = await insertUser(DBUserWithoutId(
-    first_name=user.firstName,
-    second_name=user.secondName,
-    email=user.email,
-    phone=user.phone
-  ))
+  new_user_id = await insertUser(getDBUserWithoutId(user))
   return User(**user.model_dump(), id=new_user_id)
 
-async def deleteUser():
+async def updateOneUserById(user_id: int, user: UserWithoutId):
+  pass
+
+async def deleteUserById(user_id: int):
   pass

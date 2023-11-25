@@ -1,5 +1,5 @@
 data
-node_modules
+node_modules/
 .devcontainer/docker-compose.built.yaml
 detection
 __pycache__/

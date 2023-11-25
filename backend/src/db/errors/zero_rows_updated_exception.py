@@ -1,0 +1,2 @@
+class ZeroRowsUpdatedException(Exception):
+  pass

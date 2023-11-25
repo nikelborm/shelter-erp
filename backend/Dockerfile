@@ -21,4 +21,4 @@ CMD uvicorn main:app --host 0.0.0.0 --port 3001
 
 FROM prepare as development
 # 3001 should be taken from INNER_BACKEND_HTTP_SERVER_PORT env var
-CMD uvicorn main:app --reload --host 0.0.0.0 --port 3001
+CMD MODE='migration' python main.py; MODE='mock' python main.py; uvicorn main:app --reload --host 0.0.0.0 --port ${SERVER_PORT}

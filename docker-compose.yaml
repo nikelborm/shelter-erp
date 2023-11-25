@@ -11,18 +11,55 @@ services:
       dockerfile: ./frontend/Dockerfile
       target: dev_nginx
       args:
-        - NGINX_HTTP_PORT=${NGINX_HTTP_PORT}
+        - INNER_NGINX_HTTP_PORT=${INNER_NGINX_HTTP_PORT}
     environment:
       - TZ=${TZ}
       - GENERATE_SOURCEMAP=${GENERATE_SOURCEMAP}
+      - INNER_NGINX_HTTP_PORT=${INNER_NGINX_HTTP_PORT}
       - INNER_DEV_FRONT_LIVE_RELOAD_SERVER_PORT=${INNER_DEV_FRONT_LIVE_RELOAD_SERVER_PORT}
       - INNER_BACKEND_HTTP_SERVER_PORT=${INNER_BACKEND_HTTP_SERVER_PORT}
       - INNER_BACKEND_WS_SERVER_PORT=${INNER_BACKEND_WS_SERVER_PORT}
     ports:
-      - ${NGINX_HTTP_PORT}:${NGINX_HTTP_PORT}/tcp
+      - ${EXTERNAL_NGINX_HTTP_PORT}:${INNER_NGINX_HTTP_PORT}/tcp
     networks:
       nginx-front-net-dev:
       nginx-back-net-dev:
+
+  frontend-dev:
+    image: "${DOCKER_HUB_NICKNAME}/${DOCKER_REGISTRY_REPO_NAME}:${COMPOSE_PROJECT_NAME}-frontend-dev"
+    restart: unless-stopped
+    build:
+      context: ./
+      dockerfile: ./frontend/Dockerfile
+      target: next_dev_front
+      args:
+        - INNER_DEV_FRONT_LIVE_RELOAD_SERVER_PORT=${INNER_DEV_FRONT_LIVE_RELOAD_SERVER_PORT}
+    environment:
+      - TZ=${TZ}
+      - GENERATE_SOURCEMAP=${GENERATE_SOURCEMAP}
+      - NEXT_PUBLIC_SITE_ADDRESS=http://nginx-dev:${EXTERNAL_NGINX_HTTP_PORT}
+      - DANGEROUSLY_DISABLE_HOST_CHECK=${DANGEROUSLY_DISABLE_HOST_CHECK}
+      - REACT_APP_NAME=${COMPOSE_PROJECT_NAME}
+      - TSC_WATCHFILE=UseFsEvents
+    ports:
+      - 5001:5001/tcp
+      - 5002:5002/tcp
+    volumes:
+      - type: bind
+        source: ./frontend/src
+        target: /app/src
+        consistency: delegated
+      - type: bind
+        source: ./frontend/pages
+        target: /app/pages
+        consistency: delegated
+      - type: bind
+        source: ./frontend/public
+        target: /app/public
+        consistency: delegated
+    networks:
+      nginx-front-net-dev:
+      front-back-net-dev:
 
   backend-dev:
     image: "${DOCKER_HUB_NICKNAME}/${DOCKER_REGISTRY_REPO_NAME}:${COMPOSE_PROJECT_NAME}-backend-dev"
@@ -30,8 +67,8 @@ services:
     depends_on:
       - postgres-dev
     build:
-      context: ./
-      dockerfile: ./backend/Dockerfile
+      context: ./backend/
+      dockerfile: ./Dockerfile
       target: development
       args:
         - INNER_BACKEND_HTTP_SERVER_PORT=${INNER_BACKEND_HTTP_SERVER_PORT}
@@ -39,7 +76,6 @@ services:
     environment:
       - TZ=${TZ}
       - PY_ENV=development
-      - JWT_SECRET=${JWT_SECRET}
       - USER_PASSWORD_HASH_SALT=${USER_PASSWORD_HASH_SALT}
 
       - DATABASE_HOST=${DATABASE_HOST}
@@ -55,10 +91,9 @@ services:
         source: ./backend/src
         target: /app/src
         consistency: delegated
-    ports:
-      - ${DEV_BACKEND_DEBUGGER_PORT}:${DEV_BACKEND_DEBUGGER_PORT}
     networks:
       nginx-back-net-dev:
+      front-back-net-dev:
       back-db-net-dev:
 
   postgres-dev:
@@ -95,4 +130,5 @@ networks:
   nginx-back-net-dev: {}
 
   back-db-net-dev: {}
+  front-back-net-dev: {}
   pgcli-db-net-dev: {}
