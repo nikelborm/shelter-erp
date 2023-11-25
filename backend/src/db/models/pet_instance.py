@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 class DBPetInstanceWithoutIdToInsert(BaseModel):
   shelter_id: int
@@ -7,7 +8,8 @@ class DBPetInstanceWithoutIdToInsert(BaseModel):
 class DBPetInstanceWithoutId(BaseModel):
   shelter_id: int
   abstract_pet_id: int
-  was_brought_at: str
+  was_brought_at: datetime
+  name: str
 
 class DBPetInstance(DBPetInstanceWithoutId):
   pet_instance_id: int

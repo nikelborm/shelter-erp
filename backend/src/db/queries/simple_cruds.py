@@ -14,24 +14,24 @@ pet_takeout_request_db_crud = DB_CRUD_Functions('PetTakeoutRequest', 'PetTakeout
 
 # shelter_db_crud
 selectAllShelters = shelter_db_crud.selectAllEntities
-selectShelterById = shelter_db_crud.selectEntityByPk
+selectShelterByPk = shelter_db_crud.selectEntityByPk
 insertShelter     = shelter_db_crud.insertEntity
-updateShelterById = shelter_db_crud.updateEntityByPk
-deleteShelterById = shelter_db_crud.deleteEntityByPk
+updateShelterByPk = shelter_db_crud.updateEntityByPk
+deleteShelterByPk = shelter_db_crud.deleteEntityByPk
 
 # user_db_crud
 selectAllUsers = user_db_crud.selectAllEntities
-selectUserById = user_db_crud.selectEntityByPk
+selectUserByPk = user_db_crud.selectEntityByPk
 insertUser     = user_db_crud.insertEntity
-updateUserById = user_db_crud.updateEntityByPk
-deleteUserById = user_db_crud.deleteEntityByPk
+updateUserByPk = user_db_crud.updateEntityByPk
+deleteUserByPk = user_db_crud.deleteEntityByPk
 
 # employee_db_crud
 selectAllEmployees = employee_db_crud.selectAllEntities
-selectEmployeeById = employee_db_crud.selectEntityByPk
+selectEmployeeByPk = employee_db_crud.selectEntityByPk
 insertEmployee     = employee_db_crud.insertEntity
-updateEmployeeById = employee_db_crud.updateEntityByPk
-deleteEmployeeById = employee_db_crud.deleteEntityByPk
+updateEmployeeByPk = employee_db_crud.updateEntityByPk
+deleteEmployeeByPk = employee_db_crud.deleteEntityByPk
 
 # employee_in_shelter_db_crud
 selectAllEmployeeInShelters = employee_in_shelter_db_crud.selectAllEntities
@@ -42,21 +42,21 @@ deleteEmployeeInShelterByPk = employee_in_shelter_db_crud.deleteEntityByPk
 
 # abstract_pet_db_crud
 selectAllAbstractPets = abstract_pet_db_crud.selectAllEntities
-selectAbstractPetById = abstract_pet_db_crud.selectEntityByPk
+selectAbstractPetByPk = abstract_pet_db_crud.selectEntityByPk
 insertAbstractPet     = abstract_pet_db_crud.insertEntity
-updateAbstractPetById = abstract_pet_db_crud.updateEntityByPk
-deleteAbstractPetById = abstract_pet_db_crud.deleteEntityByPk
+updateAbstractPetByPk = abstract_pet_db_crud.updateEntityByPk
+deleteAbstractPetByPk = abstract_pet_db_crud.deleteEntityByPk
 
 # pet_instance_db_crud
 selectAllPetInstances = pet_instance_db_crud.selectAllEntities
-selectPetInstanceById = pet_instance_db_crud.selectEntityByPk
+selectPetInstanceByPk = pet_instance_db_crud.selectEntityByPk
 insertPetInstance     = pet_instance_db_crud.insertEntity
-updatePetInstanceById = pet_instance_db_crud.updateEntityByPk
-deletePetInstanceById = pet_instance_db_crud.deleteEntityByPk
+updatePetInstanceByPk = pet_instance_db_crud.updateEntityByPk
+deletePetInstanceByPk = pet_instance_db_crud.deleteEntityByPk
 
 # pet_takeout_request_db_crud
 selectAllPetTakeoutRequests = pet_takeout_request_db_crud.selectAllEntities
-selectPetTakeoutRequestById = pet_takeout_request_db_crud.selectEntityByPk
+selectPetTakeoutRequestByPk = pet_takeout_request_db_crud.selectEntityByPk
 insertPetTakeoutRequest     = pet_takeout_request_db_crud.insertEntity
-updatePetTakeoutRequestById = pet_takeout_request_db_crud.updateEntityByPk
-deletePetTakeoutRequestById = pet_takeout_request_db_crud.deleteEntityByPk
+updatePetTakeoutRequestByPk = pet_takeout_request_db_crud.updateEntityByPk
+deletePetTakeoutRequestByPk = pet_takeout_request_db_crud.deleteEntityByPk

@@ -1,20 +1,20 @@
 from .simple_cruds import selectAllShelters, \
-selectShelterById, \
+selectShelterByPk, \
 insertShelter, \
-updateShelterById, \
-deleteShelterById, \
+updateShelterByPk, \
+deleteShelterByPk, \
 \
 selectAllUsers, \
-selectUserById, \
+selectUserByPk, \
 insertUser, \
-updateUserById, \
-deleteUserById, \
+updateUserByPk, \
+deleteUserByPk, \
 \
 selectAllEmployees, \
-selectEmployeeById, \
+selectEmployeeByPk, \
 insertEmployee, \
-updateEmployeeById, \
-deleteEmployeeById, \
+updateEmployeeByPk, \
+deleteEmployeeByPk, \
 \
 selectAllEmployeeInShelters, \
 selectEmployeeInShelterByPk, \
@@ -23,19 +23,19 @@ updateEmployeeInShelterByPk, \
 deleteEmployeeInShelterByPk, \
 \
 selectAllAbstractPets, \
-selectAbstractPetById, \
+selectAbstractPetByPk, \
 insertAbstractPet, \
-updateAbstractPetById, \
-deleteAbstractPetById, \
+updateAbstractPetByPk, \
+deleteAbstractPetByPk, \
 \
 selectAllPetInstances, \
-selectPetInstanceById, \
+selectPetInstanceByPk, \
 insertPetInstance, \
-updatePetInstanceById, \
-deletePetInstanceById, \
+updatePetInstanceByPk, \
+deletePetInstanceByPk, \
 \
 selectAllPetTakeoutRequests, \
-selectPetTakeoutRequestById, \
+selectPetTakeoutRequestByPk, \
 insertPetTakeoutRequest, \
-updatePetTakeoutRequestById, \
-deletePetTakeoutRequestById
+updatePetTakeoutRequestByPk, \
+deletePetTakeoutRequestByPk
