@@ -1,5 +1,5 @@
 from enum import StrEnum
-from typing import Generic, TypeVar
+from typing import Generic, TypeVar, Any
 from pydantic import BaseModel
 from src.db.errors import ReturnedZeroRowsException, ZeroRowsUpdatedException
 from .DatabaseTransactionManager import DatabaseTransactionManager
@@ -23,9 +23,10 @@ class DB_CRUD_Functions(Generic[SelectStarModel, ColumnNamesEnum]):
   async def selectAllEntities(self):
     async with DatabaseTransactionManager() as connection:
       entities = await connection.fetch(f'SELECT * from {self.dbTable.table_name}')
+      print(entities)
       return [self.dbTable.pydanticModelForSelectStar(**entity) for entity in entities]
 
-  async def selectEntityByPk(self, **entity_pk_columns):
+  async def selectEntityByPk(self, entity_pk_columns: dict[ColumnNamesEnum, Any]):
     givenPkColumnsList = list(entity_pk_columns.keys())
 
     if not self.dbTable.consist_only_of_pk_columns(frozenset(givenPkColumnsList)):

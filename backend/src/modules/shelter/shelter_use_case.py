@@ -1,34 +1,25 @@
 from fastapi import HTTPException
+
+from src.config.tables_column_names import SHELTER_CNS
 from .models import Shelter, ShelterWithoutId
-from src.db.queries import selectAllShelters, insertShelter, selectShelterById
+from .helpers import getDBShelterWithoutId, getShelter
+from src.db.queries import selectAllShelters, insertShelter, selectShelterByPk
 from src.db.errors import ReturnedZeroRowsException
-from src.db.models import DBShelterWithoutId
 
 async def getAllShelters():
   db_shelters = await selectAllShelters()
-  return [Shelter(
-    id=db_shelter.shelter_id,
-    name=db_shelter.name,
-    address=db_shelter.address,
-  ) for db_shelter in db_shelters]
+  return [getShelter(db_shelter) for db_shelter in db_shelters]
 
 async def getOneShelterById(shelter_id: int):
   try:
-    db_shelter = await selectShelterById(shelter_id)
+    db_shelter = await selectShelterByPk({ SHELTER_CNS.SHELTER_ID: shelter_id })
   except ReturnedZeroRowsException:
     raise HTTPException(status_code=404, detail="Shelter not found")
 
-  return Shelter(
-    id=db_shelter.shelter_id,
-    name=db_shelter.name,
-    address=db_shelter.address,
-  )
+  return getShelter(db_shelter)
 
 async def createShelter(shelter: ShelterWithoutId) -> Shelter:
-  new_shelter_id = await insertShelter(DBShelterWithoutId(
-    name=shelter.name,
-    address=shelter.address,
-  ))
+  new_shelter_id = await insertShelter(getDBShelterWithoutId(shelter))
   return Shelter(**shelter.model_dump(), id=new_shelter_id)
 
 async def updateOneShelterById(shelter_id: int, shelter: ShelterWithoutId):
