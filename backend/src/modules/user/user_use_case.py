@@ -3,7 +3,6 @@ from .models import User, UserWithoutId
 from .helpers import getDBUserWithoutId, getUser
 from src.db.queries import selectAllUsers, insertUser, selectUserById
 from src.db.errors import ReturnedZeroRowsException
-from src.db.models import DBUserWithoutId
 
 async def getAllUsers():
   db_users = await selectAllUsers()
@@ -11,7 +10,7 @@ async def getAllUsers():
 
 async def getOneUserById(user_id: int):
   try:
-    db_user = await selectUserById(user_id)
+    db_user = await selectUserById(user_id=user_id)
   except ReturnedZeroRowsException:
     raise HTTPException(status_code=404, detail="User not found")
 

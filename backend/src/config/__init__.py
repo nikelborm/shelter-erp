@@ -11,7 +11,7 @@ from .tables_column_names import ABSTRACT_PET_CNS
 from .tables_column_names import PET_INSTANCE_CNS
 from .tables_column_names import PET_TAKEOUT_REQUEST_CNS
 
-from .tables_column_names import shelterDbTable
+from .tables_column_names import ShelterTable
 from .tables_column_names import UserTable
 from .tables_column_names import EmployeeTable
 from .tables_column_names import AbstractPetTable
