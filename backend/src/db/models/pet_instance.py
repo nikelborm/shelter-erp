@@ -1,10 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime
 
-class DBPetInstanceWithoutIdToInsert(BaseModel):
-  shelter_id: int
-  abstract_pet_id: int
-
 class DBPetInstanceWithoutId(BaseModel):
   shelter_id: int
   abstract_pet_id: int

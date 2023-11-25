@@ -2,7 +2,7 @@ from enum import StrEnum
 
 from pydantic import BaseModel
 from src.tools import DbTable
-from src.db.models import DBUser, DBShelter, DBPetInstance
+from src.db.models import DBUser, DBShelter, DBPetInstance, DBAbstractPet
 
 
 
@@ -63,7 +63,7 @@ class ABSTRACT_PET_CNS(StrEnum):
 
 AbstractPetTable = DbTable(
   table_name=f'{DATABASE_SCHEMA}.abstract_pet',
-  pydanticModelForSelectStar=BaseModel,
+  pydanticModelForSelectStar=DBAbstractPet,
   columns=ABSTRACT_PET_CNS,
   always_generated_columns=frozenset({ABSTRACT_PET_CNS.ABSTRACT_PET_ID}),
   pk_columns=frozenset({ABSTRACT_PET_CNS.ABSTRACT_PET_ID}),
