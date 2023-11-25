@@ -1,4 +1,6 @@
 from enum import StrEnum
+
+from pydantic import BaseModel
 from src.tools import DbTable
 from src.db.models import DBUser, DBShelter, DBPetInstance
 
@@ -11,7 +13,7 @@ class SHELTER_CNS(StrEnum):
   ADDRESS = 'address'
   NAME = 'name'
 
-shelterDbTable = DbTable(
+ShelterTable = DbTable(
   table_name=f'{DATABASE_SCHEMA}.shelter',
   pydanticModelForSelectStar=DBShelter,
   columns=SHELTER_CNS,
@@ -46,6 +48,7 @@ class EMPLOYEE_CNS(StrEnum):
 
 EmployeeTable = DbTable(
   table_name=f'{DATABASE_SCHEMA}.employee',
+  pydanticModelForSelectStar=BaseModel,
   columns=EMPLOYEE_CNS,
   pk_columns=frozenset({EMPLOYEE_CNS.USER_ID, EMPLOYEE_CNS.SHELTER_ID}),
   columns_with_defaults=frozenset({EMPLOYEE_CNS.EMPLOYED_AT, EMPLOYEE_CNS.IS_ACTIVE}),
@@ -60,6 +63,7 @@ class ABSTRACT_PET_CNS(StrEnum):
 
 AbstractPetTable = DbTable(
   table_name=f'{DATABASE_SCHEMA}.abstract_pet',
+  pydanticModelForSelectStar=BaseModel,
   columns=ABSTRACT_PET_CNS,
   always_generated_columns=frozenset({ABSTRACT_PET_CNS.ABSTRACT_PET_ID}),
   pk_columns=frozenset({ABSTRACT_PET_CNS.ABSTRACT_PET_ID}),
@@ -95,6 +99,7 @@ class PET_TAKEOUT_REQUEST_CNS(StrEnum):
 
 PetTakeoutRequestTable = DbTable(
   table_name=f'{DATABASE_SCHEMA}.pet_takeout_request',
+  pydanticModelForSelectStar=BaseModel,
   columns=PET_TAKEOUT_REQUEST_CNS,
   always_generated_columns=frozenset({PET_TAKEOUT_REQUEST_CNS.PET_TAKEOUT_REQUEST_ID}),
   pk_columns=frozenset({PET_TAKEOUT_REQUEST_CNS.PET_TAKEOUT_REQUEST_ID}),

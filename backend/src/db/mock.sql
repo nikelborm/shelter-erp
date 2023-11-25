@@ -12,11 +12,16 @@ VALUES
   ('Jane', 'Smith', 'jane@example.com', '987-654-3210'),
   ('Alex', 'Johnson', 'alex@example.com', '555-555-5555');
 
-INSERT INTO "employee" ("shelter_id", "user_id", "password_salt", "password_hash", "work_email", "employee_position")
+INSERT INTO "employee_user" ("employee_user_id", "password_salt", "password_hash", "work_email")
 VALUES
-  (1, 1, 'salt1', 'hash1', 'john@happypaws.com', 'Manager'),
-  (2, 2, 'salt2', 'hash2', 'jane@furryfriends.com', 'Supervisor'),
-  (3, 2, 'salt3', 'hash3', 'alex@whiskersandtails.com', 'Caregiver');
+  (1, 'salt1', 'hash1', 'john@happypaws.com'),
+  (2, 'salt2', 'hash2', 'jane@furryfriends.com');
+
+INSERT INTO "employee_user_in_shelter" ("shelter_id", "employee_user_id", "employee_position")
+VALUES
+  (1, 1, 'Manager'),
+  (2, 2, 'Supervisor'),
+  (3, 2, 'Caregiver');
 
 INSERT INTO "abstract_pet" ("parent_abstract_pet_id", "pet_class_name")
 VALUES
@@ -36,6 +41,6 @@ INSERT INTO "pet_takeout_request" ("adopter_user_id", "employee_user_id", "shelt
 VALUES
   (1, 1, 1, 2, 'undecided', '2023-11-23 10:00:00', NULL),
   (1, 1, 1, 1, 'approved', '2023-11-23 10:00:00', '2023-11-23 11:00:00'),
-  (2, 2, 3, 3, 'rejected', '2023-11-22 09:00:00', '2023-11-23 11:00:00');
+  (2, 2, 3, 3, 'undecided', '2023-11-22 09:00:00', NULL);
 
 COMMIT;
