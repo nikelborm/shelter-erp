@@ -1,5 +1,5 @@
-from src.config.tables_column_names import AbstractPetTable, EmployeeTable, PetInstanceTable, PetTakeoutRequestTable, ShelterTable, UserTable
-from src.tools import DB_CRUD_Functions
+from .tablesDefinitions import AbstractPetTable, EmployeeTable, PetInstanceTable, PetTakeoutRequestTable, ShelterTable, UserTable
+from .tools import DB_CRUD_Functions
 
 
 shelter_db_crud             = DB_CRUD_Functions('Shelter',           'Shelters',             ShelterTable)

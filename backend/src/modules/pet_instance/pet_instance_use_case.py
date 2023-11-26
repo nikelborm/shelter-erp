@@ -1,10 +1,8 @@
 from fastapi import HTTPException
-
-from src.config.tables_column_names import PET_INSTANCE_CNS
 from .models import PetInstance, PetInstanceWithoutId
 from .helpers import getDBPetInstanceWithoutId, getPetInstance
-from src.db.queries import selectAllPetInstances, insertPetInstance, selectPetInstanceByPk
-from src.db.errors import ReturnedZeroRowsException
+from src.db import selectAllPetInstances, insertPetInstance, selectPetInstanceByPk, ReturnedZeroRowsException, PET_INSTANCE_CNS
+
 
 async def getAllPetInstances():
   db_pet_instances = await selectAllPetInstances()

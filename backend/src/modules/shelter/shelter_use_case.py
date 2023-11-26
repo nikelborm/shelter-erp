@@ -1,10 +1,8 @@
 from fastapi import HTTPException
-
-from src.config.tables_column_names import SHELTER_CNS
 from .models import Shelter, ShelterWithoutId
 from .helpers import getDBShelterWithoutId, getShelter
-from src.db.queries import selectAllShelters, insertShelter, selectShelterByPk
-from src.db.errors import ReturnedZeroRowsException
+from src.db import selectAllShelters, insertShelter, selectShelterByPk, SHELTER_CNS, ReturnedZeroRowsException
+
 
 async def getAllShelters():
   db_shelters = await selectAllShelters()

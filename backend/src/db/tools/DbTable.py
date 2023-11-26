@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field
 from enum import StrEnum
 from typing import Generic, TypeVar
-
 from pydantic import BaseModel
 
 

@@ -1,10 +1,7 @@
 from fastapi import HTTPException
-
-from src.config.tables_column_names import USER_CNS
 from .models import User, UserWithoutId
 from .helpers import getDBUserWithoutId, getUser
-from src.db.queries import selectAllUsers, insertUser, selectUserByPk
-from src.db.errors import ReturnedZeroRowsException
+from src.db import selectAllUsers, insertUser, selectUserByPk, ReturnedZeroRowsException, USER_CNS
 
 async def getAllUsers():
   db_users = await selectAllUsers()

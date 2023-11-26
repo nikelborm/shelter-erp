@@ -1,12 +1,8 @@
 from enum import StrEnum
-
 from pydantic import BaseModel
-from src.tools import DbTable
-from src.db.models import DBUser, DBShelter, DBPetInstance, DBAbstractPet
-
-
-
-DATABASE_SCHEMA = 'public'
+from src.config import DATABASE_SCHEMA
+from .tools import DbTable
+from .models import DBUser, DBShelter, DBPetInstance, DBAbstractPet
 
 class SHELTER_CNS(StrEnum):
   SHELTER_ID = 'shelter_id'
