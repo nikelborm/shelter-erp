@@ -3,7 +3,7 @@ import { GetServerSideProps } from "next";
 import { authProvider } from "src/authProvider";
 
 export default function AbstractPetCreate() {
-  return <AntdCreateInferencer hideCodeViewerInProduction />;
+  return <AntdCreateInferencer/>;
 }
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

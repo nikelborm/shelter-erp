@@ -3,7 +3,7 @@ import { GetServerSideProps } from "next";
 import { authProvider } from "src/authProvider";
 
 export default function AbstractPetEdit() {
-  return <AntdEditInferencer hideCodeViewerInProduction />;
+  return <AntdEditInferencer/>;
 }
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

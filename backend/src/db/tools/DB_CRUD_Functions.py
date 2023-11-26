@@ -1,7 +1,10 @@
 from enum import StrEnum
+import sys
 from typing import Generic, TypeVar, Any
 from pydantic import BaseModel
-from src.db.errors import ReturnedZeroRowsException, ZeroRowsUpdatedException
+# sys.path.append('../errors')
+
+from ..errors import ReturnedZeroRowsException, ZeroRowsUpdatedException
 from .DatabaseTransactionManager import DatabaseTransactionManager
 from .DbTable import DbTable
 

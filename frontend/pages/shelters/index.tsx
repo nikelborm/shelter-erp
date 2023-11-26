@@ -3,7 +3,7 @@ import { GetServerSideProps } from "next";
 import { authProvider } from "src/authProvider";
 
 export default function ShelterList() {
-  return <AntdListInferencer hideCodeViewerInProduction />;
+  return <AntdListInferencer/>;
 }
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
