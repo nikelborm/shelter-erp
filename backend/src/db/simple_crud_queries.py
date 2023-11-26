@@ -1,11 +1,11 @@
-from .tablesDefinitions import AbstractPetTable, EmployeeTable, PetInstanceTable, PetTakeoutRequestTable, ShelterTable, UserTable
+from .tablesDefinitions import AbstractPetTable, EmployeeUserTable, PetInstanceTable, PetTakeoutRequestTable, ShelterTable, UserTable, EmployeeUserInShelterTable
 from .tools import DB_CRUD_Functions
 
 
 shelter_db_crud             = DB_CRUD_Functions('Shelter',           'Shelters',             ShelterTable)
 user_db_crud                = DB_CRUD_Functions('User',              'Users',                UserTable)
-employee_db_crud            = DB_CRUD_Functions('Employee',          'Employees',            EmployeeTable)
-employee_in_shelter_db_crud = DB_CRUD_Functions('Employee',          'Employees',            EmployeeTable)
+employee_users_db_crud      = DB_CRUD_Functions('EmployeeUser',      'EmployeeUsers',       EmployeeUserTable)
+employee_in_shelter_db_crud = DB_CRUD_Functions('EmployeeInShelter', 'EmployeesInShelters',  EmployeeUserInShelterTable)
 abstract_pet_db_crud        = DB_CRUD_Functions('AbstractPet',       'AbstractPets',         AbstractPetTable)
 pet_instance_db_crud        = DB_CRUD_Functions('PetInstance',       'PetInstances',         PetInstanceTable)
 pet_takeout_request_db_crud = DB_CRUD_Functions('PetTakeoutRequest', 'PetTakeoutRequests',   PetTakeoutRequestTable)
@@ -27,11 +27,11 @@ updateUserByPk = user_db_crud.updateEntityByPk
 deleteUserByPk = user_db_crud.deleteEntityByPk
 
 # employee_db_crud
-selectAllEmployees = employee_db_crud.selectAllEntities
-selectEmployeeByPk = employee_db_crud.selectEntityByPk
-insertEmployee     = employee_db_crud.insertEntity
-updateEmployeeByPk = employee_db_crud.updateEntityByPk
-deleteEmployeeByPk = employee_db_crud.deleteEntityByPk
+selectAllEmployees = employee_users_db_crud.selectAllEntities
+selectEmployeeByPk = employee_users_db_crud.selectEntityByPk
+insertEmployee     = employee_users_db_crud.insertEntity
+updateEmployeeByPk = employee_users_db_crud.updateEntityByPk
+deleteEmployeeByPk = employee_users_db_crud.deleteEntityByPk
 
 # employee_in_shelter_db_crud
 selectAllEmployeeInShelters = employee_in_shelter_db_crud.selectAllEntities

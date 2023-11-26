@@ -73,6 +73,7 @@ services:
       args:
         - INNER_BACKEND_HTTP_SERVER_PORT=${INNER_BACKEND_HTTP_SERVER_PORT}
         - INNER_BACKEND_WS_SERVER_PORT=${INNER_BACKEND_WS_SERVER_PORT}
+        - BACKEND_DIR_FOR_CLI_HINTS=${BACKEND_DIR_FOR_CLI_HINTS}
     environment:
       - TZ=${TZ}
       - PY_ENV=development
@@ -89,7 +90,11 @@ services:
     volumes:
       - type: bind
         source: ./backend/src
-        target: /app/src
+        target: /${BACKEND_DIR_FOR_CLI_HINTS}/src
+        consistency: delegated
+      - type: bind
+        source: ./backend/main.py
+        target: /${BACKEND_DIR_FOR_CLI_HINTS}/main.py
         consistency: delegated
     networks:
       nginx-back-net-dev:
