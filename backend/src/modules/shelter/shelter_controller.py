@@ -1,5 +1,6 @@
 from fastapi import APIRouter
-from .shelter_use_case import ShelterWithoutId, getAllShelters, createShelter, deleteShelterById, getOneShelterById, updateOneShelterById
+from .models import ShelterWithoutId
+from .shelter_use_case import getAllShelters, createShelter, deleteShelterById, getOneShelterById, updateOneShelterById
 
 router = APIRouter()
 

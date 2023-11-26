@@ -1,5 +1,6 @@
 from fastapi import APIRouter
-from .user_use_case import UserWithoutId, getAllUsers, createUser, deleteUserById, getOneUserById, updateOneUserById
+from .models import UserWithoutId
+from .user_use_case import getAllUsers, createUser, deleteUserById, getOneUserById, updateOneUserById
 
 router = APIRouter()
 

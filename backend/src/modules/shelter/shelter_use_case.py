@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from .models import Shelter, ShelterWithoutId
 from .helpers import getDBShelterWithoutId, getShelter
-from src.db import selectAllShelters, insertShelter, selectShelterByPk, SHELTER_CNS, ReturnedZeroRowsException
+from src.db import selectAllShelters, insertShelter, selectShelterByPk, ZeroRowsReturnedException, DBShelterPk, deleteShelterByPk, updateShelterByPk, ZeroRowsAffectedException
 
 
 async def getAllShelters():
@@ -10,9 +10,9 @@ async def getAllShelters():
 
 async def getOneShelterById(shelter_id: int):
   try:
-    db_shelter = await selectShelterByPk({ SHELTER_CNS.SHELTER_ID: shelter_id })
-  except ReturnedZeroRowsException:
-    raise HTTPException(status_code=404, detail="Shelter not found")
+    db_shelter = await selectShelterByPk(DBShelterPk(shelter_id=shelter_id))
+  except ZeroRowsReturnedException:
+    raise HTTPException(status_code=404, detail="Shelter you tried to get was not found")
 
   return getShelter(db_shelter)
 
@@ -21,7 +21,13 @@ async def createShelter(shelter: ShelterWithoutId) -> Shelter:
   return Shelter(**shelter.model_dump(), id=new_shelter_id)
 
 async def updateOneShelterById(shelter_id: int, shelter: ShelterWithoutId):
-  pass
+  try:
+    await updateShelterByPk(shelter, DBShelterPk(shelter_id=shelter_id))
+  except ZeroRowsAffectedException:
+    raise HTTPException(status_code=404, detail="Shelter you tried to update was not found")
 
 async def deleteShelterById(shelter_id: int):
-  pass
+  try:
+    await deleteShelterByPk(DBShelterPk(shelter_id=shelter_id))
+  except ZeroRowsAffectedException:
+    raise HTTPException(status_code=404, detail="Shelter you tried to update was not found")

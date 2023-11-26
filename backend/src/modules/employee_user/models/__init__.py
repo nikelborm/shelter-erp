@@ -1,6 +1,6 @@
 from pydantic import BaseModel, EmailStr
 
-class EmployeeWithoutId(BaseModel):
+class EmployeeUserWithoutId(BaseModel):
   shelterId: int
   userId: int
   employedAt: str
@@ -8,5 +8,5 @@ class EmployeeWithoutId(BaseModel):
   isActive: bool
   employeePosition: str
 
-class Employee(EmployeeWithoutId):
+class EmployeeUser(EmployeeUserWithoutId):
   pass

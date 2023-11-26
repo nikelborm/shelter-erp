@@ -1,0 +1,2 @@
+class ZeroRowsReturnedException(Exception):
+  pass

@@ -1,2 +1,0 @@
-class ReturnedZeroRowsException(Exception):
-  pass

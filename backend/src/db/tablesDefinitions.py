@@ -1,8 +1,7 @@
 from enum import StrEnum
-from pydantic import BaseModel
 from src.config import DATABASE_SCHEMA
 from .tools import DbTable
-from .models import DBUser, DBShelter, DBPetInstance, DBAbstractPet, DBUserPk, DBShelterPk, DBPetInstancePk, DBAbstractPetPk
+from .models import DBUser, DBShelter, DBPetInstance, DBAbstractPet, DBUserPk, DBShelterPk, DBPetInstancePk, DBAbstractPetPk, DBEmployeeUser, DBEmployeeUserPk, DBEmployeeUserInShelter, DBEmployeeUserInShelterPk, DBPetTakeoutRequest, DBPetTakeoutRequestPk
 
 class SHELTER_CNS(StrEnum):
   SHELTER_ID = 'shelter_id'
@@ -40,8 +39,8 @@ class EMPLOYEE_USER_CNS(StrEnum):
 
 EmployeeUserTable = DbTable(
   table_name=f'{DATABASE_SCHEMA}.employee_user',
-  pydanticModelForSelectStar=BaseModel,
-  pydanticPkModel=BaseModel, # TODO change to normal model
+  pydanticModelForSelectStar=DBEmployeeUser,
+  pydanticPkModel=DBEmployeeUserPk,
   columns=EMPLOYEE_USER_CNS,
   readonly_columns=frozenset({EMPLOYEE_USER_CNS.EMPLOYEE_USER_ID}),
 )
@@ -55,9 +54,8 @@ class EMPLOYEE_USER_IN_SHELTER_CNS(StrEnum):
 
 EmployeeUserInShelterTable = DbTable(
   table_name=f'{DATABASE_SCHEMA}.employee_user_in_shelter',
-  pydanticModelForSelectStar=BaseModel,
-  pydanticPkModel=BaseModel, # TODO change to normal model
-  # pk_columns=frozenset({EMPLOYEE_USER_CNS.USER_ID, EMPLOYEE_USER_CNS.SHELTER_ID}),
+  pydanticModelForSelectStar=DBEmployeeUserInShelter,
+  pydanticPkModel=DBEmployeeUserInShelterPk,
   columns=EMPLOYEE_USER_IN_SHELTER_CNS,
   columns_with_defaults=frozenset({
     EMPLOYEE_USER_IN_SHELTER_CNS.EMPLOYED_AT,
@@ -109,8 +107,8 @@ class PET_TAKEOUT_REQUEST_CNS(StrEnum):
 
 PetTakeoutRequestTable = DbTable(
   table_name=f'{DATABASE_SCHEMA}.pet_takeout_request',
-  pydanticModelForSelectStar=BaseModel,
-  pydanticPkModel=BaseModel, # TODO change to normal model
+  pydanticModelForSelectStar=DBPetTakeoutRequest,
+  pydanticPkModel=DBPetTakeoutRequestPk,
   columns=PET_TAKEOUT_REQUEST_CNS,
   always_generated_columns=frozenset({PET_TAKEOUT_REQUEST_CNS.PET_TAKEOUT_REQUEST_ID}),
   columns_with_defaults=frozenset({
