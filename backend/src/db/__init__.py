@@ -1,6 +1,14 @@
 from .migrate import migrate, mock
-from .models import DBAbstractPet, DBAbstractPetWithoutId, DBPetInstance, DBPetInstanceWithoutId, DBShelter, DBShelterWithoutId, DBUser, DBUserWithoutId
-from .errors import ReturnedZeroRowsException, ZeroRowsUpdatedException
+
+from .models import DBUser, DBUserWithoutId, DBUserPk, \
+DBShelter, DBShelterWithoutId, DBShelterPk, \
+DBPetInstance, DBPetInstanceWithoutId, DBPetInstancePk, \
+DBAbstractPet, DBAbstractPetWithoutId, DBAbstractPetPk, \
+DBEmployeeUser, DBEmployeeUserPk, DBEmployeeUserWithoutId, \
+DBEmployeeUserInShelter, DBEmployeeUserInShelterPk, DBEmployeeUserInShelterWithoutId, \
+DBPetTakeoutRequest, DBPetTakeoutRequestPk, DBPetTakeoutRequestWithoutId, PetTakeoutRequestStatusEnum
+
+from .errors import ZeroRowsReturnedException, ZeroRowsAffectedException
 from .simple_crud_queries import selectAllShelters, \
 selectShelterByPk, \
 insertShelter, \
@@ -13,17 +21,17 @@ insertUser, \
 updateUserByPk, \
 deleteUserByPk, \
 \
-selectAllEmployees, \
-selectEmployeeByPk, \
-insertEmployee, \
-updateEmployeeByPk, \
-deleteEmployeeByPk, \
+selectAllEmployeeUsers, \
+selectEmployeeUserByPk, \
+insertEmployeeUser, \
+updateEmployeeUserByPk, \
+deleteEmployeeUserByPk, \
 \
-selectAllEmployeeInShelters, \
-selectEmployeeInShelterByPk, \
-insertEmployeeInShelter, \
-updateEmployeeInShelterByPk, \
-deleteEmployeeInShelterByPk, \
+selectAllEmployeeUserInShelters, \
+selectEmployeeUserInShelterByPk, \
+insertEmployeeUserInShelter, \
+updateEmployeeUserInShelterByPk, \
+deleteEmployeeUserInShelterByPk, \
 \
 selectAllAbstractPets, \
 selectAbstractPetByPk, \
@@ -42,20 +50,3 @@ selectPetTakeoutRequestByPk, \
 insertPetTakeoutRequest, \
 updatePetTakeoutRequestByPk, \
 deletePetTakeoutRequestByPk
-
-
-from .tablesDefinitions import SHELTER_CNS
-from .tablesDefinitions import USER_CNS
-from .tablesDefinitions import EMPLOYEE_USER_CNS
-from .tablesDefinitions import EMPLOYEE_USER_IN_SHELTER_CNS
-from .tablesDefinitions import ABSTRACT_PET_CNS
-from .tablesDefinitions import PET_INSTANCE_CNS
-from .tablesDefinitions import PET_TAKEOUT_REQUEST_CNS
-
-from .tablesDefinitions import ShelterTable
-from .tablesDefinitions import UserTable
-from .tablesDefinitions import EmployeeUserTable
-from .tablesDefinitions import EmployeeUserInShelterTable
-from .tablesDefinitions import AbstractPetTable
-from .tablesDefinitions import PetInstanceTable
-from .tablesDefinitions import PetTakeoutRequestTable

@@ -2,13 +2,13 @@ from .tablesDefinitions import AbstractPetTable, EmployeeUserTable, PetInstanceT
 from .tools import DB_CRUD_Functions
 
 
-shelter_db_crud             = DB_CRUD_Functions('Shelter',           'Shelters',             ShelterTable)
-user_db_crud                = DB_CRUD_Functions('User',              'Users',                UserTable)
-employee_users_db_crud      = DB_CRUD_Functions('EmployeeUser',      'EmployeeUsers',       EmployeeUserTable)
-employee_in_shelter_db_crud = DB_CRUD_Functions('EmployeeInShelter', 'EmployeesInShelters',  EmployeeUserInShelterTable)
-abstract_pet_db_crud        = DB_CRUD_Functions('AbstractPet',       'AbstractPets',         AbstractPetTable)
-pet_instance_db_crud        = DB_CRUD_Functions('PetInstance',       'PetInstances',         PetInstanceTable)
-pet_takeout_request_db_crud = DB_CRUD_Functions('PetTakeoutRequest', 'PetTakeoutRequests',   PetTakeoutRequestTable)
+shelter_db_crud                  = DB_CRUD_Functions('Shelter',           'Shelters',            ShelterTable)
+user_db_crud                     = DB_CRUD_Functions('User',              'Users',               UserTable)
+employee_users_db_crud           = DB_CRUD_Functions('EmployeeUser',      'EmployeeUsers',       EmployeeUserTable)
+employee_user_in_shelter_db_crud = DB_CRUD_Functions('EmployeeInShelter', 'EmployeesInShelters', EmployeeUserInShelterTable)
+abstract_pet_db_crud             = DB_CRUD_Functions('AbstractPet',       'AbstractPets',        AbstractPetTable)
+pet_instance_db_crud             = DB_CRUD_Functions('PetInstance',       'PetInstances',        PetInstanceTable)
+pet_takeout_request_db_crud      = DB_CRUD_Functions('PetTakeoutRequest', 'PetTakeoutRequests',  PetTakeoutRequestTable)
 
 
 
@@ -27,18 +27,18 @@ updateUserByPk = user_db_crud.updateEntityByPk
 deleteUserByPk = user_db_crud.deleteEntityByPk
 
 # employee_db_crud
-selectAllEmployees = employee_users_db_crud.selectAllEntities
-selectEmployeeByPk = employee_users_db_crud.selectEntityByPk
-insertEmployee     = employee_users_db_crud.insertEntity
-updateEmployeeByPk = employee_users_db_crud.updateEntityByPk
-deleteEmployeeByPk = employee_users_db_crud.deleteEntityByPk
+selectAllEmployeeUsers = employee_users_db_crud.selectAllEntities
+selectEmployeeUserByPk = employee_users_db_crud.selectEntityByPk
+insertEmployeeUser     = employee_users_db_crud.insertEntity
+updateEmployeeUserByPk = employee_users_db_crud.updateEntityByPk
+deleteEmployeeUserByPk = employee_users_db_crud.deleteEntityByPk
 
 # employee_in_shelter_db_crud
-selectAllEmployeeInShelters = employee_in_shelter_db_crud.selectAllEntities
-selectEmployeeInShelterByPk = employee_in_shelter_db_crud.selectEntityByPk
-insertEmployeeInShelter     = employee_in_shelter_db_crud.insertEntity
-updateEmployeeInShelterByPk = employee_in_shelter_db_crud.updateEntityByPk
-deleteEmployeeInShelterByPk = employee_in_shelter_db_crud.deleteEntityByPk
+selectAllEmployeeUserInShelters = employee_user_in_shelter_db_crud.selectAllEntities
+selectEmployeeUserInShelterByPk = employee_user_in_shelter_db_crud.selectEntityByPk
+insertEmployeeUserInShelter     = employee_user_in_shelter_db_crud.insertEntity
+updateEmployeeUserInShelterByPk = employee_user_in_shelter_db_crud.updateEntityByPk
+deleteEmployeeUserInShelterByPk = employee_user_in_shelter_db_crud.deleteEntityByPk
 
 # abstract_pet_db_crud
 selectAllAbstractPets = abstract_pet_db_crud.selectAllEntities

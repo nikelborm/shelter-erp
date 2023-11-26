@@ -85,7 +85,8 @@ class DbTable(Generic[SelectStarModel, PkOnlyModel, ColumnNamesEnum]):
                   f'{pk_column_name} = ${index + 1 + len(self.pk_columns_list)}'
                   for index, pk_column_name in enumerate(columnsToSetValueList)
                 )}
-                WHERE {self.sql_pk_selector}"""
+                WHERE {self.sql_pk_selector}
+                RETURNING {", ".join(self.pk_columns_list)}"""
 
   def plain_delete_query(self):
     return  f'''DELETE FROM {self.table_name}

@@ -1,2 +1,2 @@
-from .returned_zero_rows_exception import ReturnedZeroRowsException
-from .zero_rows_updated_exception import ZeroRowsUpdatedException
+from .zero_rows_returned_exception import ZeroRowsReturnedException
+from .zero_rows_affected_exception import ZeroRowsAffectedException

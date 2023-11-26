@@ -2,7 +2,7 @@ from enum import StrEnum
 from typing import Generic, TypeVar
 from pydantic import BaseModel
 
-from ..errors import ReturnedZeroRowsException, ZeroRowsUpdatedException
+from ..errors import ZeroRowsReturnedException, ZeroRowsAffectedException
 from .DatabaseTransactionManager import DatabaseTransactionManager
 from .DbTable import DbTable
 
@@ -37,7 +37,7 @@ class DB_CRUD_Functions(Generic[SelectStarModel, PkOnlyModel, ColumnNamesEnum]):
       )
 
       if entity is None:
-        raise ReturnedZeroRowsException()
+        raise ZeroRowsReturnedException()
 
       return self.dbTable.pydanticModelForSelectStar(**entity)
 
@@ -54,7 +54,7 @@ class DB_CRUD_Functions(Generic[SelectStarModel, PkOnlyModel, ColumnNamesEnum]):
       )
 
       if not generated_components:
-        raise ZeroRowsUpdatedException()
+        raise ZeroRowsAffectedException()
 
       return generated_components
 
@@ -64,10 +64,13 @@ class DB_CRUD_Functions(Generic[SelectStarModel, PkOnlyModel, ColumnNamesEnum]):
     self.dbTable.assertCanUpdateColumns(frozenset(givenColumnsList))
 
     async with DatabaseTransactionManager() as connection:
-      await connection.fetchrow(
+      entity = await connection.fetchrow(
         self.dbTable.plain_update_query(givenColumnsList),
         *(getattr(entity_pk, pk_column_name) for pk_column_name in self.dbTable.pk_columns_list)
       )
+
+      if entity is None:
+        raise ZeroRowsAffectedException()
 
   async def deleteEntityByPk(self, entity_pk: PkOnlyModel):
     self.assert_is_pk(entity_pk)
@@ -79,9 +82,7 @@ class DB_CRUD_Functions(Generic[SelectStarModel, PkOnlyModel, ColumnNamesEnum]):
       )
 
       if entity is None:
-        raise ReturnedZeroRowsException()
-
-      return entity
+        raise ZeroRowsAffectedException()
 
   def assert_is_pk(self, entity_pk: PkOnlyModel):
     if not isinstance(entity_pk, self.dbTable.pydanticPkModel):

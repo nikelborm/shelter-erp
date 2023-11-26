@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from .models import AbstractPet, AbstractPetWithoutId
 from .helpers import getDBAbstractPetWithoutId, getAbstractPet
-from src.db import selectAllAbstractPets, insertAbstractPet, selectAbstractPetByPk, ReturnedZeroRowsException, ABSTRACT_PET_CNS
+from src.db import selectAllAbstractPets, insertAbstractPet, selectAbstractPetByPk, ZeroRowsReturnedException, DBAbstractPetPk, deleteAbstractPetByPk, updateAbstractPetByPk, ZeroRowsAffectedException
 
 
 async def getAllAbstractPets():
@@ -10,9 +10,9 @@ async def getAllAbstractPets():
 
 async def getOneAbstractPetById(abstract_pet_id: int):
   try:
-    db_abstract_pet = await selectAbstractPetByPk({ ABSTRACT_PET_CNS.ABSTRACT_PET_ID: abstract_pet_id })
-  except ReturnedZeroRowsException:
-    raise HTTPException(status_code=404, detail="AbstractPet not found")
+    db_abstract_pet = await selectAbstractPetByPk(DBAbstractPetPk(abstract_pet_id=abstract_pet_id))
+  except ZeroRowsReturnedException:
+    raise HTTPException(status_code=404, detail="AbstractPet you tried to get was not found")
 
   return getAbstractPet(db_abstract_pet)
 
@@ -21,7 +21,13 @@ async def createAbstractPet(abstract_pet: AbstractPetWithoutId) -> AbstractPet:
   return AbstractPet(**abstract_pet.model_dump(), id=new_abstract_pet_id)
 
 async def updateOneAbstractPetById(abstract_pet_id: int, abstract_pet: AbstractPetWithoutId):
-  pass
+  try:
+    await updateAbstractPetByPk(abstract_pet, DBAbstractPetPk(abstract_pet_id=abstract_pet_id))
+  except ZeroRowsAffectedException:
+    raise HTTPException(status_code=404, detail="AbstractPet you tried to update was not found")
 
 async def deleteAbstractPetById(abstract_pet_id: int):
-  pass
+  try:
+    await deleteAbstractPetByPk(DBAbstractPetPk(abstract_pet_id=abstract_pet_id))
+  except ZeroRowsAffectedException:
+    raise HTTPException(status_code=404, detail="AbstractPet you tried to update was not found")
