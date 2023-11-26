@@ -6,5 +6,8 @@ class DBUserWithoutId(BaseModel):
   email: EmailStr
   phone: str
 
-class DBUser(DBUserWithoutId):
+class DBUserPk(BaseModel):
   user_id: int
+
+class DBUser(DBUserWithoutId, DBUserPk):
+  pass

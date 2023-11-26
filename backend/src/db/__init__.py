@@ -46,14 +46,16 @@ deletePetTakeoutRequestByPk
 
 from .tablesDefinitions import SHELTER_CNS
 from .tablesDefinitions import USER_CNS
-from .tablesDefinitions import EMPLOYEE_CNS
+from .tablesDefinitions import EMPLOYEE_USER_CNS
+from .tablesDefinitions import EMPLOYEE_USER_IN_SHELTER_CNS
 from .tablesDefinitions import ABSTRACT_PET_CNS
 from .tablesDefinitions import PET_INSTANCE_CNS
 from .tablesDefinitions import PET_TAKEOUT_REQUEST_CNS
 
 from .tablesDefinitions import ShelterTable
 from .tablesDefinitions import UserTable
-from .tablesDefinitions import EmployeeTable
+from .tablesDefinitions import EmployeeUserTable
+from .tablesDefinitions import EmployeeUserInShelterTable
 from .tablesDefinitions import AbstractPetTable
 from .tablesDefinitions import PetInstanceTable
 from .tablesDefinitions import PetTakeoutRequestTable

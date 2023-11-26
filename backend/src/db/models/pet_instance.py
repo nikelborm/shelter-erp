@@ -7,5 +7,8 @@ class DBPetInstanceWithoutId(BaseModel):
   was_brought_at: datetime
   name: str
 
-class DBPetInstance(DBPetInstanceWithoutId):
+class DBPetInstancePk(BaseModel):
   pet_instance_id: int
+
+class DBPetInstance(DBPetInstanceWithoutId, DBPetInstancePk):
+  pass

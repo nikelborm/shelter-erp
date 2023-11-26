@@ -4,5 +4,8 @@ class DBShelterWithoutId(BaseModel):
   name: str
   address: str
 
-class DBShelter(DBShelterWithoutId):
+class DBShelterPk(BaseModel):
   shelter_id: int
+
+class DBShelter(DBShelterWithoutId, DBShelterPk):
+  pass

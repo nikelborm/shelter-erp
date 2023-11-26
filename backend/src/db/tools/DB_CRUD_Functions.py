@@ -1,62 +1,55 @@
 from enum import StrEnum
-import sys
-from typing import Generic, TypeVar, Any
+from typing import Generic, TypeVar
 from pydantic import BaseModel
-# sys.path.append('../errors')
 
 from ..errors import ReturnedZeroRowsException, ZeroRowsUpdatedException
 from .DatabaseTransactionManager import DatabaseTransactionManager
 from .DbTable import DbTable
 
-def getDollarSequence(length: int) -> str:
-  return ', '.join(f'${k + 1}' for k in range(length))
 
 SelectStarModel = TypeVar('SelectStarModel', bound=BaseModel)
+PkOnlyModel = TypeVar('PkOnlyModel', bound=BaseModel)
 ColumnNamesEnum = TypeVar('ColumnNamesEnum', bound=StrEnum)
 
-class DB_CRUD_Functions(Generic[SelectStarModel, ColumnNamesEnum]):
+
+class DB_CRUD_Functions(Generic[SelectStarModel, PkOnlyModel, ColumnNamesEnum]):
   PascalSingularName: str
   PascalPluralName: str
-  dbTable: DbTable[SelectStarModel, ColumnNamesEnum]
-  def __init__(self, PascalSingularName: str, PascalPluralName: str, dbTable: DbTable[SelectStarModel, ColumnNamesEnum]):
+  dbTable: DbTable[SelectStarModel, PkOnlyModel, ColumnNamesEnum]
+  def __init__(self, PascalSingularName: str, PascalPluralName: str, dbTable: DbTable[SelectStarModel, PkOnlyModel, ColumnNamesEnum]):
     self.PascalSingularName = PascalSingularName
     self.PascalPluralName = PascalPluralName
     self.dbTable = dbTable
 
   async def selectAllEntities(self):
     async with DatabaseTransactionManager() as connection:
-      entities = await connection.fetch(f'SELECT * from {self.dbTable.table_name}')
+      entities = await connection.fetch(self.dbTable.plain_select_all_query())
       print(entities)
       return [self.dbTable.pydanticModelForSelectStar(**entity) for entity in entities]
 
-  async def selectEntityByPk(self, entity_pk_columns: dict[ColumnNamesEnum, Any]):
-    givenPkColumnsList = list(entity_pk_columns.keys())
-
-    if not self.dbTable.consist_only_of_pk_columns(frozenset(givenPkColumnsList)):
-      raise Exception(f'Cannot select entity with given set of pk columns: {entity_pk_columns.keys()}')
+  async def selectEntityByPk(self, entity_pk: PkOnlyModel):
+    self.assert_is_pk(entity_pk)
 
     async with DatabaseTransactionManager() as connection:
       entity = await connection.fetchrow(
-        f'SELECT * from {self.dbTable.table_name} where {" AND ".join(f"{pk_column_name} = ${index + 1}" for index, pk_column_name in enumerate(givenPkColumnsList))}',
-        *(entity_pk_columns[k] for k in givenPkColumnsList)
+        self.dbTable.plain_select_by_pk_query(),
+        *(getattr(entity_pk, pk_column_name) for pk_column_name in self.dbTable.pk_columns_list)
       )
+
       if entity is None:
         raise ReturnedZeroRowsException()
+
       return self.dbTable.pydanticModelForSelectStar(**entity)
 
   async def insertEntity(self, dbEntity: BaseModel) -> int:
-    givenColumnsList = list(dbEntity.__class__.model_fields.keys())
-    givenColumnsSet = frozenset(givenColumnsList)
+    givenColumnsList = list(dbEntity.model_fields.keys())
 
     # Db entity should not have always generated columns
-    if not self.dbTable.canInsertColumns(givenColumnsSet):
-      raise Exception(f'Cannot insert entity with given set of columns: {givenColumnsSet}')
+    self.dbTable.assertCanInsertColumns(frozenset(givenColumnsList))
 
     async with DatabaseTransactionManager() as connection:
       generated_components = await connection.fetchrow(
-        f"""insert into {self.dbTable.table_name}({', '.join(givenColumnsList)})
-        values ({getDollarSequence(len(givenColumnsList))})
-        returning {', '.join(self.dbTable.get_generated_columns(givenColumnsSet))} """,
+        self.dbTable.plain_insert_query(givenColumnsList),
         *(getattr(dbEntity, column_name) for column_name in givenColumnsList)
       )
 
@@ -65,8 +58,31 @@ class DB_CRUD_Functions(Generic[SelectStarModel, ColumnNamesEnum]):
 
       return generated_components
 
-  async def updateEntityByPk(self, dbEntityWithoutPk: BaseModel, **entity_pk_columns):
-    pass
+  async def updateEntityByPk(self, dbEntityWithoutPk: BaseModel, entity_pk: PkOnlyModel):
+    self.assert_is_pk(entity_pk)
+    givenColumnsList = list(dbEntityWithoutPk.model_fields.keys())
+    self.dbTable.assertCanUpdateColumns(frozenset(givenColumnsList))
 
-  async def deleteEntityByPk(self, **entity_pk_columns):
-    pass
+    async with DatabaseTransactionManager() as connection:
+      await connection.fetchrow(
+        self.dbTable.plain_update_query(givenColumnsList),
+        *(getattr(entity_pk, pk_column_name) for pk_column_name in self.dbTable.pk_columns_list)
+      )
+
+  async def deleteEntityByPk(self, entity_pk: PkOnlyModel):
+    self.assert_is_pk(entity_pk)
+
+    async with DatabaseTransactionManager() as connection:
+      entity = await connection.fetchrow(
+        self.dbTable.plain_delete_query(),
+        *(getattr(entity_pk, pk_column_name) for pk_column_name in self.dbTable.pk_columns_list)
+      )
+
+      if entity is None:
+        raise ReturnedZeroRowsException()
+
+      return entity
+
+  def assert_is_pk(self, entity_pk: PkOnlyModel):
+    if not isinstance(entity_pk, self.dbTable.pydanticPkModel):
+      raise Exception(f'entity_pk({entity_pk}) is not instance of {self.dbTable.pydanticPkModel.__name__}')
