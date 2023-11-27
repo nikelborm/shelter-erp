@@ -1,12 +1,12 @@
 from pydantic import BaseModel, EmailStr
 
 class EmployeeUserWithoutId(BaseModel):
-  shelterId: int
-  userId: int
-  employedAt: str
+  passwordSalt: str
+  passwordHash: str
   workEmail: EmailStr
-  isActive: bool
-  employeePosition: str
 
-class EmployeeUser(EmployeeUserWithoutId):
+class EmployeeUserPk(BaseModel):
+  id: int
+
+class EmployeeUser(EmployeeUserWithoutId, EmployeeUserPk):
   pass

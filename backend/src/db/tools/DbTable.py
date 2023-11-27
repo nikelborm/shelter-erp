@@ -1,14 +1,11 @@
 from dataclasses import dataclass, field
 from enum import StrEnum
-from typing import Generic, TypeVar
+from typing import Any, Generic, TypeVar
 from pydantic import BaseModel
 
 
-def set_of_columns(columns: frozenset[str]) -> frozenset[str]:
+def set_of_columns(columns: frozenset[Any]) -> frozenset[str]:
   return frozenset({str(k) for k in columns})
-
-def getDollarSequence(length: int) -> str:
-  return ', '.join(f'${k + 1}' for k in range(length))
 
 SelectStarModel = TypeVar('SelectStarModel', bound=BaseModel)
 PkOnlyModel = TypeVar('PkOnlyModel', bound=BaseModel)
@@ -48,22 +45,27 @@ class DbTable(Generic[SelectStarModel, PkOnlyModel, ColumnNamesEnum]):
 
     self.sql_pk_selector = " AND ".join(f"{pk_column_name} = ${index + 1}" for index, pk_column_name in enumerate(self.pk_columns_list))
 
-  def assertCanInsertColumns(self, columns: frozenset[str]):
-    if not (self.columns_possible_to_insert.issuperset(columns) and columns.issuperset(self.columns_required_to_insert)):
-      raise Exception(f'Cannot insert entity with given set of columns: {columns}')
+  def assertCanInsertColumns(self, columnsWithAssignedValues: frozenset[str], columnsWithDefaultValues: frozenset[str]):
+    if not (
+      self.columns_possible_to_insert.issuperset(columnsWithAssignedValues)
+      and columnsWithAssignedValues.issuperset(self.columns_required_to_insert)
+    ):
+      raise Exception(f'Cannot insert entity with given set of columns: {columnsWithAssignedValues}')
+    if not columnsWithDefaultValues.issubset(self.columns_with_defaults):
+      raise Exception(f'Cannot insert entity and use defaults for given set of columns: {columnsWithDefaultValues}')
 
   def assertCanUpdateColumns(self, columns: frozenset[str]):
     if not self.columns_possible_to_update.issuperset(columns):
       raise Exception(f'Cannot update entity with given set of columns: {columns}')
 
-  def has_pk_columns(self, columns: frozenset[str]) -> bool:
-    return frozenset(self.pk_columns_list).issubset(columns)
+  # def has_pk_columns(self, columns: frozenset[str]) -> bool:
+  #   return frozenset(self.pk_columns_list).issubset(columns)
 
-  def consist_only_of_pk_columns(self, columns: frozenset[str]) -> bool:
-    return frozenset(self.pk_columns_list) == columns
+  # def consist_only_of_pk_columns(self, columns: frozenset[str]) -> bool:
+  #   return frozenset(self.pk_columns_list) == columns
 
-  def get_generated_columns(self, columns: frozenset[str]) -> frozenset[str]:
-    return self.always_generated_columns.union(self.columns_with_defaults.difference(columns))
+  # def get_generated_columns(self, columns: frozenset[str]) -> frozenset[str]:
+  #   return self.always_generated_columns.union(self.columns_with_defaults.difference(columns))
 
   def plain_select_all_query(self):
     return f'SELECT * FROM {self.table_name}'
@@ -71,12 +73,20 @@ class DbTable(Generic[SelectStarModel, PkOnlyModel, ColumnNamesEnum]):
   def plain_select_by_pk_query(self):
     return f'SELECT * FROM {self.table_name} WHERE {self.sql_pk_selector}'
 
-  def plain_insert_query(self, givenColumnsList: list[str]):
+  def plain_insert_query(self, givenColumnsList: list[str], columnsWithDefaultValues: frozenset[str]):
+    generated_columns = self.always_generated_columns.union(columnsWithDefaultValues)
     query = f"""INSERT INTO {self.table_name}({', '.join(givenColumnsList)})
-                VALUES ({getDollarSequence(len(givenColumnsList))})"""
-    generated_columns = self.get_generated_columns(frozenset(givenColumnsList))
-    if len(generated_columns):
-      query += f" RETURNING {', '.join(generated_columns)}"
+                VALUES ({', '.join(
+                  (
+                    *(f'${k + 1}' for k, v in enumerate(givenColumnsList)),
+                    *map(lambda x: 'default', generated_columns)
+                  )
+                )})
+                RETURNING 'success' as \"__sql_query_status\"{
+                  ', ' + ', '.join(generated_columns)
+                  if len(generated_columns)
+                  else ""
+                }"""
     return query
 
   def plain_update_query(self, columnsToSetValueList: list[str]):

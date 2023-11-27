@@ -7,6 +7,12 @@ class DBPetInstanceWithoutId(BaseModel):
   was_brought_at: datetime
   name: str
 
+class DBPetInstanceToInsert(BaseModel):
+  shelter_id: int
+  abstract_pet_id: int
+  was_brought_at: datetime | None
+  name: str
+
 class DBPetInstancePk(BaseModel):
   pet_instance_id: int
 

@@ -12,6 +12,15 @@ class PetTakeoutRequestWithoutId(BaseModel):
   createdAt: datetime
   resolvedAt: datetime | None
 
+class PetTakeoutRequestToCreate(BaseModel):
+  adopterUserId: int
+  shelterId: int
+  employeeUserId: int
+  petInstanceId: int
+  status: PetTakeoutRequestStatusEnum | None
+  createdAt: datetime | None
+  resolvedAt: datetime | None
+
 class PetTakeoutRequestPk(BaseModel):
   id: int
 

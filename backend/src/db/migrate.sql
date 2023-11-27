@@ -94,7 +94,7 @@ CREATE TABLE pet_takeout_request (
   pet_instance_id INTEGER NOT NULL,
   status pet_takeout_request_status NOT NULL default 'undecided',
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
-  resolved_at TIMESTAMP WITH TIME ZONE,
+  resolved_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   PRIMARY KEY (pet_takeout_request_id),
   CONSTRAINT "CHECK_pet_takeout_request_when_resolved_has_timestamp" CHECK (
     (
