@@ -1,1 +1,1 @@
-from .remapModels import getDBPetInstance, getDBPetInstanceWithoutId, getPetInstance, getPetInstanceWithoutId
+from .remapModels import getDBPetInstance, getDBPetInstanceWithoutId, getPetInstance, getPetInstanceWithoutId, getDBPetInstanceToInsert

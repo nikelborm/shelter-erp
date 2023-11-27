@@ -1,7 +1,7 @@
 from enum import StrEnum
 from typing import Generic, TypeVar
 from pydantic import BaseModel
-
+from asyncpg import Record
 from ..errors import ZeroRowsReturnedException, ZeroRowsAffectedException
 from .DatabaseTransactionManager import DatabaseTransactionManager
 from .DbTable import DbTable
@@ -41,20 +41,22 @@ class DB_CRUD_Functions(Generic[SelectStarModel, PkOnlyModel, ColumnNamesEnum]):
 
       return self.dbTable.pydanticModelForSelectStar(**entity)
 
-  async def insertEntity(self, dbEntity: BaseModel) -> int:
+  async def insertEntity(self, dbEntity: BaseModel, useDefaultsFor: frozenset[ColumnNamesEnum] | None = None) -> Record:
+    useDefaultsFor = frozenset() if useDefaultsFor is None else useDefaultsFor
     givenColumnsList = list(dbEntity.model_fields.keys())
 
     # Db entity should not have always generated columns
-    self.dbTable.assertCanInsertColumns(frozenset(givenColumnsList))
+    self.dbTable.assertCanInsertColumns(frozenset(givenColumnsList), useDefaultsFor)
 
     async with DatabaseTransactionManager() as connection:
       generated_components = await connection.fetchrow(
-        self.dbTable.plain_insert_query(givenColumnsList),
+        self.dbTable.plain_insert_query(givenColumnsList, useDefaultsFor),
         *(getattr(dbEntity, column_name) for column_name in givenColumnsList)
       )
 
-      if not generated_components:
+      if not generated_components or generated_components['__sql_query_status'] != 'success':
         raise ZeroRowsAffectedException()
+      delattr(generated_components, '__sql_query_status')
 
       return generated_components
 

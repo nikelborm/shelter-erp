@@ -1,7 +1,8 @@
 from fastapi import HTTPException
+from icecream import ic
+from src.db import selectAllUsers, insertUser, selectUserByPk, ZeroRowsReturnedException, DBUserPk, deleteUserByPk, updateUserByPk, ZeroRowsAffectedException, USER_CNS
 from .models import User, UserWithoutId
 from .helpers import getDBUserWithoutId, getUser
-from src.db import selectAllUsers, insertUser, selectUserByPk, ZeroRowsReturnedException, DBUserPk, deleteUserByPk, updateUserByPk, ZeroRowsAffectedException
 
 
 async def getAllUsers():
@@ -17,8 +18,8 @@ async def getOneUserById(user_id: int):
   return getUser(db_user)
 
 async def createUser(user: UserWithoutId) -> User:
-  new_user_id = await insertUser(getDBUserWithoutId(user))
-  return User(**user.model_dump(), id=new_user_id)
+  user_record = await insertUser(getDBUserWithoutId(user))
+  return User(**user.model_dump(), id=user_record[USER_CNS.USER_ID])
 
 async def updateOneUserById(user_id: int, user: UserWithoutId):
   try:

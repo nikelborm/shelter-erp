@@ -1,7 +1,7 @@
 from fastapi import HTTPException
-from .models import PetInstance, PetInstanceWithoutId
-from .helpers import getDBPetInstanceWithoutId, getPetInstance
-from src.db import selectAllPetInstances, insertPetInstance, selectPetInstanceByPk, ZeroRowsReturnedException, DBPetInstancePk, deletePetInstanceByPk, updatePetInstanceByPk, ZeroRowsAffectedException
+from src.db import selectAllPetInstances, insertPetInstance, selectPetInstanceByPk, ZeroRowsReturnedException, DBPetInstancePk, deletePetInstanceByPk, updatePetInstanceByPk, ZeroRowsAffectedException, PET_INSTANCE_CNS
+from .models import PetInstance, PetInstanceWithoutId, PetInstanceToCreate
+from .helpers import getPetInstance, getDBPetInstanceToInsert
 
 
 async def getAllPetInstances():
@@ -16,9 +16,19 @@ async def getOnePetInstanceById(pet_instance_id: int):
 
   return getPetInstance(db_pet_instance)
 
-async def createPetInstance(pet_instance: PetInstanceWithoutId) -> PetInstance:
-  new_pet_instance_id = await insertPetInstance(getDBPetInstanceWithoutId(pet_instance))
-  return PetInstance(**pet_instance.model_dump(), id=new_pet_instance_id)
+async def createPetInstance(pet_instance: PetInstanceToCreate) -> PetInstance:
+  columnsWithDefaults = set()
+  model_to_insert = getDBPetInstanceToInsert(pet_instance)
+  if pet_instance.wasBroughtAt is None:
+    delattr(model_to_insert, PET_INSTANCE_CNS.WAS_BROUGHT_AT)
+    columnsWithDefaults.add(PET_INSTANCE_CNS.WAS_BROUGHT_AT)
+  pet_instance_record = await insertPetInstance(model_to_insert)
+
+  return PetInstance(
+    **pet_instance.model_dump(),
+    id=pet_instance_record[PET_INSTANCE_CNS.PET_INSTANCE_ID],
+    wasBroughtAt=pet_instance_record.get(PET_INSTANCE_CNS.WAS_BROUGHT_AT, pet_instance.wasBroughtAt),
+  )
 
 async def updateOnePetInstanceById(pet_instance_id: int, pet_instance: PetInstanceWithoutId):
   try:

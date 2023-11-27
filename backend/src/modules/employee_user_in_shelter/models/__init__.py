@@ -1,12 +1,21 @@
+from datetime import datetime
 from pydantic import BaseModel, EmailStr
 
 class EmployeeUserInShelterWithoutId(BaseModel):
-  shelterId: int
-  userId: int
-  employedAt: str
-  workEmail: EmailStr
   isActive: bool
+  employedAt: datetime
   employeePosition: str
 
-class EmployeeUserInShelter(EmployeeUserInShelterWithoutId):
+class EmployeeUserInShelterToCreate(BaseModel):
+  isActive: bool | None
+  employedAt: datetime | None
+  employeePosition: str
+  employeeUserId: int
+  shelterId: int
+
+class EmployeeUserInShelterPk(BaseModel):
+  employeeUserId: int
+  shelterId: int
+
+class EmployeeUserInShelter(EmployeeUserInShelterWithoutId, EmployeeUserInShelterPk):
   pass

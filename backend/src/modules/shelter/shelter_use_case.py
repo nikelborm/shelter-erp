@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from .models import Shelter, ShelterWithoutId
 from .helpers import getDBShelterWithoutId, getShelter
-from src.db import selectAllShelters, insertShelter, selectShelterByPk, ZeroRowsReturnedException, DBShelterPk, deleteShelterByPk, updateShelterByPk, ZeroRowsAffectedException
+from src.db import selectAllShelters, insertShelter, selectShelterByPk, ZeroRowsReturnedException, DBShelterPk, deleteShelterByPk, updateShelterByPk, ZeroRowsAffectedException, SHELTER_CNS
 
 
 async def getAllShelters():
@@ -17,8 +17,8 @@ async def getOneShelterById(shelter_id: int):
   return getShelter(db_shelter)
 
 async def createShelter(shelter: ShelterWithoutId) -> Shelter:
-  new_shelter_id = await insertShelter(getDBShelterWithoutId(shelter))
-  return Shelter(**shelter.model_dump(), id=new_shelter_id)
+  shelter_record = await insertShelter(getDBShelterWithoutId(shelter))
+  return Shelter(**shelter.model_dump(), id=shelter_record[SHELTER_CNS.SHELTER_ID])
 
 async def updateOneShelterById(shelter_id: int, shelter: ShelterWithoutId):
   try:

@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from .models import PetTakeoutRequestWithoutId
-from .pet_takeout_request_use_case import getAllPetTakeoutRequests, createPetTakeoutRequest, deletePetTakeoutRequestById, getOnePetTakeoutRequestById, updateOnePetTakeoutRequestById
+from .pet_takeout_request_use_case import getAllPetTakeoutRequests, createPetTakeoutRequest, deletePetTakeoutRequestById, getOnePetTakeoutRequestById, updateOnePetTakeoutRequestById, PetTakeoutRequestToCreate
 
 router = APIRouter()
 
@@ -17,7 +17,7 @@ async def handleUpdatingOnePetTakeoutRequestById(pet_takeout_request_id: int, pe
   return await updateOnePetTakeoutRequestById(pet_takeout_request_id, pet_takeout_request)
 
 @router.post("/")
-async def handleCreatingPetTakeoutRequest(pet_takeout_request: PetTakeoutRequestWithoutId):
+async def handleCreatingPetTakeoutRequest(pet_takeout_request: PetTakeoutRequestToCreate):
   return await createPetTakeoutRequest(pet_takeout_request)
 
 @router.delete("/{pet_takeout_request_id}/")

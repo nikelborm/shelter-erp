@@ -1,4 +1,5 @@
-from .tablesDefinitions import AbstractPetTable, EmployeeUserTable, PetInstanceTable, PetTakeoutRequestTable, ShelterTable, UserTable, EmployeeUserInShelterTable
+from .models import PetTakeoutRequestStatusEnum, DBPetTakeoutRequestToInsert
+from .tablesDefinitions import AbstractPetTable, EmployeeUserTable, PetInstanceTable, PetTakeoutRequestTable, ShelterTable, UserTable, EmployeeUserInShelterTable, PET_TAKEOUT_REQUEST_CNS
 from .tools import DB_CRUD_Functions
 
 

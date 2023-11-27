@@ -1,1 +1,1 @@
-from .remapModels import getDBShelter, getDBShelterWithoutId, getShelter, getShelterWithoutId
+from .remapModels import getDBEmployeeUser, getDBEmployeeUserWithoutId, getEmployeeUser, getEmployeeUserWithoutId
