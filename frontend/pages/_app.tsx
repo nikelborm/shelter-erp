@@ -92,11 +92,21 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
                     },
                   },
                   {
-                    name: "employees",
-                    list: "/employees",
-                    create: "/employees/create",
-                    edit: "/employees/edit/:id",
-                    show: "/employees/show/:id",
+                    name: "employeeUsers",
+                    list: "/employeeUsers",
+                    create: "/employeeUsers/create",
+                    edit: "/employeeUsers/edit/:id",
+                    show: "/employeeUsers/show/:id",
+                    meta: {
+                      canDelete: true,
+                    },
+                  },
+                  {
+                    name: "employeeUserInShelters",
+                    list: "/employeeUserInShelters",
+                    create: "/employeeUserInShelters/create",
+                    edit: "/employeeUserInShelters/edit/:id",
+                    show: "/employeeUserInShelters/show/:id",
                     meta: {
                       canDelete: true,
                     },
